@@ -90,17 +90,14 @@ pipeline {
             }
         }
 
-     
+    }
 
-
-
-
-    post{
-	    always {
-		echo 'slack Notification'
-		slackSend channel: '#cicd',
+        post{
+	        always {
+		    echo 'slack Notification.'
+		    slackSend channel: '#cicd',
 			color:COLOR_MAP[currentBuil.currentResult],
-			message: "*${currentBuild.currentResult}:*Job $(env.JOB_NAME} buil ${env.BUILD_NUMBER} \n More info at : ${env.BUILD_URL}"
+			message: "*${currentBuild.currentResult}:*Job ${env.JOB_NAME} buil ${env.BUILD_NUMBER} \n More info at : ${env.BUILD_URL}"
 }
 }
 }
