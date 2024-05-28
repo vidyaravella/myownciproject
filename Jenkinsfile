@@ -1,3 +1,7 @@
+def COLOR_MAP = [
+	'SUCCESS' : 'good',
+	'FAILURE' : 'danger',
+	]
 pipeline {
     agent any
     tools {
@@ -48,7 +52,7 @@ pipeline {
           }
                     steps {
             withSonarQubeEnv("${SONARSERVER}") {
-               sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+               sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile-repo \
                    -Dsonar.projectName=vprofile-repo \
                    -Dsonar.projectVersion=1.0 \
                    -Dsonar.sources=src/ \
@@ -89,4 +93,13 @@ pipeline {
      
 }
 
+
+post{
+	always {
+		echo 'slack Notification'
+		slackSend channel: '#cicd',
+			color:COLOR_MAP[currentBuil.currentResult],
+			message: "*${currentBuild.currentResult}:*Job $(env.JOB_NAME} buil ${env.BUILD_NUMBER} \n More info at : ${env.BUILD_URL}"
+}
+}
 }
